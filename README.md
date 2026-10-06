@@ -4,8 +4,8 @@
 scripts, `ffprobe`, `cp`, `scp`, etc. see real bytes instead of 0-byte stubs.
 
 ```bash
-dbx-materialize "~/AB Dropbox/.../song.flac"       # one file (blocks until local)
-dbx-materialize -j 8 "NOMAD-1559 - Ruth B - If By Chance"   # whole folder, 8 parallel
+dbx-materialize "~/Dropbox/Music/song.flac"     # one file (blocks until local)
+dbx-materialize -j 8 "Projects/Big Folder"       # whole folder, 8 parallel
 dbx-materialize -s some/folder                      # status only: what's online-only?
 ```
 
@@ -13,7 +13,7 @@ dbx-materialize -s some/folder                      # status only: what's online
 
 ## Why this exists
 
-Dropbox online-only files (legacy **Smart Sync**, which is what this Mac runs) are 0-byte
+Dropbox online-only files (legacy **Smart Sync**) are 0-byte
 placeholders tagged with a `com.dropbox.placeholder` xattr. A plain `cat`/`cp`/`read()` returns
 0 bytes and **does not trigger a download**. Only an `NSFileCoordinator` *coordinated read* (what
 apps do when they open a file) makes Dropbox fault the file in. This tool performs that read and
@@ -25,8 +25,8 @@ works there too.
 ## Install
 
 ```bash
-git clone <this repo> ~/Projects/beveradb/dropbox-materialize   # (already here on Andrew's Mac)
-cd ~/Projects/beveradb/dropbox-materialize
+git clone https://github.com/beveradb/dropbox-materialize.git
+cd dropbox-materialize
 ./install.sh            # swiftc build -> build/, symlinks into ~/.local/bin
 ```
 
@@ -83,7 +83,7 @@ It is not built or installed.
 bash tests/smoke.sh     # CLI parsing, relative paths, recursion, exit codes, simulated placeholder
 ```
 
-A real placeholder can't be faked; to test end-to-end, run `dbx-materialize -s` on a Dropbox folder,
+A real placeholder can't be faked. To test end-to-end, run `dbx-materialize -s` on a Dropbox folder,
 pick a small `ONLINE` file, materialize it, then make it online-only again in Finder.
 
 ## History
